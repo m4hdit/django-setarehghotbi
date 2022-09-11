@@ -1,0 +1,91 @@
+{% extends 'blog/home.html' %}
+{% load static %}
+{% load blog_tags %}
+
+{% block title %} {{category.title}} | setarehgotbi{% endblock %}
+
+
+
+
+{% block hero %}
+    <style type="text/css">
+      #hero {
+      width: 100%;
+      height: 100vh;
+      background: url('{{category.image.url}}') top center;
+      background-size: cover;
+      position: relative;
+      margin-bottom: -70px;
+    }
+    </style>
+    <div id="hero">
+     	<div class="hero-container">
+    		<h1>{{category.title}}</h1>
+    		<h2>مقالات دسته بندی خود را در اینجا ببینید</h2>
+    	</div>
+    </div>
+{% endblock %}
+
+
+
+
+
+
+{% block content %}
+  <section id="our-values" class="our-values">
+    <div class="container">
+      <div class="row">
+        {% if articles %}
+          <form class="search" action="{% url 'blog:category_search' category.slug %}" method="get" >
+              {% csrf_token %}
+              <input type="text" placeholder="Search.." name="search">
+              <button type="submit"><i class="bi bi-search"></i></button>
+          </form>
+          {% if search_word %}
+            <h1 style="text-align:center; margin-top: 25px; text-decoration:underline;">
+              مقالات پیدا شده مربوط به دسته بندی {{category.title}} :
+            </h1>
+          {% else %}
+              <h2 style="text-align:center;">
+                مقالات و مشاوره های مربوط به دسته 
+                <span style="color:#7195ea;text-decoration:underline;">{{category.title}}</span> 
+              را اینجا بخونید :
+            </h2>
+          {% endif %}
+          {% for article_model in articles  %}
+                <div class="col-md-6 d-flex align-items-stretch mt-4">
+                  <div class="card" style='background-image: url("{{article_model.image.url}}");'>
+                    <div class="card-body">
+                      <div>
+                      <a href="{% url 'blog:single_post' article_model.slug %}">   
+                      <h4 class="card-title" >{{article_model.title}}</h4>
+                      <p class="card-text">{{article_model.description|truncatewords:30}}</p>
+                      </a>
+                      </div>
+                      <div class="read-more read-more-p"><a href="#"> بیشتر بخوانید  <i class="bi bi-arrow-left"></i></a></div>
+                    </div>
+                  </div>
+                </div>
+          {% endfor %}
+        {% else %}
+          <div style="margin-bottom: 20%;">
+            <h4 style='text-align: center; margin-bottom:20px'>محتوایی برای نمایش دادن وجود ندارن :(</h4>
+            <img src="{% static 'blog/assets/img/no-content.webp' %}" style="margin: auto; display: block;" >
+          </div>
+           
+        {% endif %}
+      </div>
+      {% if search_word %}
+        {% pagination articles url  %}
+      {% else %}
+        {% pagination articles url search_word %}
+      {% endif %}
+    </div>
+  </section>
+<!-- End Our Values Section -->
+
+<!-- ======= Cta Section ======= -->
+{% include 'blog/ourـgoal.html' %}
+<!-- End Cta Section -->
+</main><!-- End #main -->
+{% endblock %}

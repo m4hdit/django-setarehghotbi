@@ -1,0 +1,34 @@
+{% extends 'account/registration/sign_up.html' %}
+{% load static %}
+
+{% block title %}activation invalid | setarehghotbi{% endblock %}
+
+{% block content %}
+		<div class="container-login100" style="background-image: url('{% static 'account/images/bg-01.jpg' %}');">
+		<div class="limiter">
+
+
+			</div>
+			<div class="wrap-login100" style="margin-bottom:10%">
+				<div class="login100-form validate-form">
+					<span class="login100-form-logo">
+						<i class="zmdi zmdi-landscape"></i>
+					</span>
+
+					<span class="login100-form-title p-b-34 p-t-27">
+						SETAREHGHOTBI
+					</span>
+					<h3>این لینک منقضی شده است دیگر قابل استفاده نیست</h3>
+
+					<div class="container-login100-form-btn" style="margin-top:40px">
+						<a href="{% url 'blog:home' %}"><button class="login100-form-btn">
+							برگشت به خانه
+						</button></a>
+					</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

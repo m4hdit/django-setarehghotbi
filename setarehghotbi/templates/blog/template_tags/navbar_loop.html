@@ -1,0 +1,16 @@
+<ul>
+  {% for category in category.childern.all %}
+    <li class="dropdown">
+      <a href="{% url 'blog:category' category.slug %}">
+        {% if category.childern.all %} 
+          <i class="bi bi-chevron-right"></i>
+        {% else %}
+          <i class="bi"></i>
+        {% endif %}
+        <span>{{category.title}}</span></a>
+      {% if category.childern.all %}
+        {% include 'blog/template_tags/navbar_loop.html' %}
+      {% endif %}
+    </li>
+  {% endfor %}
+</ul>

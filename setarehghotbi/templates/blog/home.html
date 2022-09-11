@@ -1,0 +1,132 @@
+{% load static %}
+{% load blog_tags %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+  <title>{% block title %}ستاره قطبی | setarehgotbi{% endblock %}</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+
+  <!-- Favicons -->
+  <link href="{% static 'blog/assets/img/favicon.png' %}" rel="icon">
+  <link href="{% static 'blog/assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+  <!-- Vendor CSS Files -->
+  <link href="{% static 'blog/assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+  <!-- Template Main CSS File -->
+  <link href="{% static 'blog/assets/css/style.css' %}" rel="stylesheet">
+  <link href="{% static 'blog/assets/css/mycss.css' %}" rel="stylesheet">
+  <!-- =======================================================
+  * Template Name: Valera - v4.7.0
+  * Template URL: https://bootstrapmade.com/valera-free-bootstrap-theme/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+  <!-- ======= Hero Section ======= -->
+  {% block hero %}
+    <section id="hero">
+      <div class="hero-container">
+        <h1>setarehghotbi</h1>
+        <h2>به کمک ما راهی به سوی موفقت اینده خود پیدا کنید :)</h2>
+      </div>
+    </section>
+  {% endblock %}
+  <!-- ======= Header ======= -->
+  {% navbar request %}
+  <!-- End Header -->
+
+  <main id="main">
+
+    <!-- ======= About Section ======= -->
+
+    <!-- ======= Our Values Section ======= -->
+    {% block content %}
+      <section id="our-values" class="our-values">
+        <div class="container">
+          <div class="row">
+            {% if blog %}
+              {% csrf_token %}
+              <form class="search" action="{% url 'blog:blog_search' %}" method="get" >
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="bi bi-search"></i></button>
+              </form>
+              {% if search_word %}
+              <h1 style="text-align:center; margin-top: 25px; text-decoration:underline;">مقالات پیدا شده :</h1>
+              {% endif %}
+              {% for blog_model in blog  %}
+                    <div class="col-md-6 d-flex align-items-stretch mt-4">
+                      <div class="card" style='background-image: url("{{blog_model.image.url}}");'>
+                        <div class="card-body">
+                          <div>
+                          <a href="{% url 'blog:single_post' blog_model.slug %}">   
+                          <h4 class="card-title" >{{blog_model.title}}</h4>
+                          <p class="card-text">{{blog_model.description|truncatewords:30}}</p>
+                          </a>
+                          </div>
+                          <div class="read-more read-more-p"><a href="#"> بیشتر بخوانید  <i class="bi bi-arrow-left"></i></a></div>
+                        </div>
+                      </div>
+                    </div>
+              {% endfor %}
+            {% else %}
+              <div style="margin-bottom: 20%;">
+                <h4 style='text-align: center; margin-bottom:20px'>محتوایی برای نمایش دادن وجود ندارن :(</h4>
+                <img src="{% static 'blog/assets/img/no-content.webp' %}" style="margin: auto; display: block;" >
+              </div>
+               
+            {% endif %}
+          </div>
+
+        </div>
+        {% if search_word %}
+          {% pagination blog url search_word  %}
+        {% else %}
+          {% pagination blog url  %}
+        {% endif %}
+      </section>
+    <!-- End Our Values Section -->
+
+    <!-- ======= Cta Section ======= -->
+
+    {% include 'blog/ourـgoal.html' %}
+
+    <!-- ======= Contact Section ======= -->
+    {% include 'blog/contact.html' %}
+    <!-- End Contact Section -->
+
+  </main><!-- End #main -->
+  {% endblock %}
+
+  <!-- ======= Footer ======= -->
+  {% include 'blog/footer.html' %}
+
+
+  <!-- End Footer -->
+  <!-- Vendor JS Files -->
+  <script src="{% static 'blog/assets/vendor/purecounter/purecounter.js' %}"></script>
+  <script src="{% static 'blog/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static 'blog/assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
+  <script src="{% static 'blog/assets/vendor/isotope-layout/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static 'blog/assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <script src="{% static 'blog/assets/vendor/php-email-form/validate.js' %}"></script>
+
+  <!-- Template Main JS File -->
+  <script src="{% static 'blog/assets/js/main.js' %}"></script>
+
+</body>
+
+</html>

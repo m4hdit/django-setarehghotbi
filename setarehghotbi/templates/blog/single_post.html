@@ -1,0 +1,162 @@
+{% extends 'blog/home.html' %}
+{% load static %}
+
+
+
+
+<!-- ======= Title ======= -->
+{% block title %}{{article.title}}{% endblock %}
+<!-- ======= end Title ======= -->
+
+
+
+  <!-- ======= Hero Section ======= -->
+{% block hero %}
+  {% if article.is_image_header %}
+    <style type="text/css">
+      #hero-single-post {
+      width: 100%;
+      height: 100vh;
+      background: url('{{article.image.url}}') top center;
+      background-size: cover;
+      position: relative;
+      margin-bottom: -70px;
+    }
+    </style>
+    <div id="hero-single-post">
+    </div>
+  {% endif %}
+{% endblock %}
+  <!-- ======= end Hero ======= -->
+
+
+
+
+<!-- ======= Our Values Section ======= -->
+{% block content %}
+  <style type="text/css">
+  .single-page-content{
+    margin: 0 13% 0 13%;
+    background-color: white;
+    padding: 50px;
+    box-shadow: -10px 5px 25px #888888;
+    border-radius: 10px;
+    margin-top: 30px;
+  }    
+  #auther-profile{
+    width: 15%;
+    text-align: left;
+    border-radius: 13px;
+    display: block;
+  }
+  .comment{
+    margin: 0 13% 0 13%;
+    padding: 50px;
+    border-radius: 10px;
+    margin-top: 30px;
+  }
+  </style>
+  <section style=" background-color:#f0f0f0;">
+      <div class="single-page-content">
+        <h1>{{article.title}}</h1>
+        <img src="{{article.auther.profile.url}}" style="display: inline-block;border-radius:50% ;width: 6%; margin-bottom:10px;">
+        <p style="color:#6c757d; display: inline-block; margin-left:30px ;">نویسنده:{{article.auther.username}}</p>
+        <p style="color:#6c757d; display:inline;">زمان انتشار:{{article.date}}</p>
+        {% if article.is_image_header == False %}
+          <img src="{{article.image.url}}" style="width:100%; border-radius:5px; display:inline-block;">
+        {% endif %}
+        <hr>
+        <p>{{article.description}}</p>
+      </div>
+
+
+      <div style="display:inline-block; vertical-align:top; " class="single-page-content">
+        <img src="{{article.auther.profile.url}}" style="border-radius: 10px;  width: 20%;">
+        <div style="display: inline-block;">
+        <h3 style="margin-right: 20px; color: #444444d6;">نویسنده:
+                                                  {% if article.auther.get_full_name %}
+                                                      {{article.auther.get_full_name}}
+                                                  {% else %}
+                                                      {{article.auther.username}}
+                                                  {% endif %}
+        </h3>
+        <p style=" color:#0000008f; margin-right: 20px;">{{article.auther.description}}</p>
+          
+        </div>
+      </div>
+      
+      <div class="comment">
+        <h2 style="color:#686666;">تعداد دیدگاه:۱۰۰</h2>
+        <form method="post">
+          {% csrf_token %}
+          {{comment_form.content}}
+          <button class="btn btn-success" style="float:left; margin: 15px; font-size: 20px;">ثبت این نظر</button>
+        </form>
+        {% if request.user.is_authenticated %}
+          <div class="d-flex flex-row user-info" style="margin-top :10px;"><img class="rounded-circle" src="{{request.user.profile.url}}" width="50">
+         <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">Marry Andrews</span><span class="date text-black-50">Shared publicly - Jan 2020</span></div>
+          </div>
+        {% else %}
+          <h3 style="color:#dfbe0c;margin-top :15px;">برای ثبت دیدگاه باید <a href="#">ثبت نام </a> کنید</h3>
+        {% endif %}
+        <hr>
+        <h1 style="text-align:center; text-decoration:underline; margin-bottom: 30px;">دیدگاه ها</h1>
+        {% for comment in comments %}
+          {% if comment.parent is None %}
+              <div style="background-color: white; padding: 20px; margin: 20px 0 20px 0;">
+                <div class="d-flex flex-row user-info"><img class="rounded-circle" src="{{article.auther.profile.url}}" width="40">
+                    <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name"> {% if comment.commenter.get_full_name %}
+                                                                                                                              {{comment.commenter.get_full_name}}
+                                                                                                                            {% else %}
+                                                                                                                              {{comment.commenter.username}}
+                                                                                                                            {% endif %}
+                                                                                                                            </span><span class="date text-black-50">تاریخ:{{comment.date_created}}</span></div>
+                </div>
+                <hr>
+                <div class="mt-2">
+                    <p class="comment-text">{{comment.content}}</p>
+                </div>
+                <div class="comment-text" style="text-align: left;"> 
+                {% if comment in request.user.likes.all %}
+                    {{comment.comment_likes_count}} likes <img style='width: 25px;' src="{% static 'blog/assets/img/hug-icon.png' %}"> 
+                {% else %}
+                    {{comment.comment_likes_count}} likes <a href="" style="display:inline-block;" onClick="document.getElementById('likebutton').submit()"><img style='width: 25px;' src="{% static 'blog/assets/img/hug-icon-2.png' %}"></a> 
+                    <form action="{% url 'blog:like_comment' %}" id="likebutton" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="slug" value="{{article.slug}}">
+                      <input type="hidden" name="comment_id" value="{{comment.id}}">
+                    </form>
+                {% endif %}
+                  <button style="float:right;" class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#target{{comment.id}}">100 پاسخ<i class="bi bi-reply"></i></button>
+                  <div id="target{{comment.id}}" class="collapse" style="text-align: right; padding:20px; background-color: gray; margin-top:30px;">
+                      <form method="post" action="{% url 'blog:single_post' article.slug %}">
+                        {% csrf_token %}
+                        {{comment_form.content}}
+                        <input type="hidden" name="comment_id" value="{{comment.id}}">
+                        <button class="btn btn-success" style="float:left; font-size: 20px;">ثبت این نظر</button>
+                      </form>
+                      {% if request.user.is_authenticated %}
+                        <div class="d-flex flex-row user-info" style="margin-top :10px;"><img class="rounded-circle" src="{{request.user.profile.url}}" width="50">
+                       <div class="d-flex flex-column justify-content-start ml-2"><span class="d-block font-weight-bold name">Marry Andrews</span><span class="date text-black-50">Shared publicly - Jan 2020</span></div>
+                        </div>
+                      {% else %}
+                        <h3 style="color:#dfbe0c;margin-top :15px;">برای ثبت دیدگاه باید <a href="#">ثبت نام </a> کنید</h3>
+                      {% endif %}
+                      <hr>
+                      {% if comment.replys.all %}
+
+                        {% include 'blog/comment_loop.html' %}
+
+                      {% endif %}
+
+                  </div>
+                  </div> 
+              </div>
+            {% endif %}
+        {% endfor %}
+      </div>
+  </section>
+
+{% endblock %}
+
+<!-- End Our Values Section -->

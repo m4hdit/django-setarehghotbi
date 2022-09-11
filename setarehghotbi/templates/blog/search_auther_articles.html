@@ -1,0 +1,114 @@
+{% extends 'blog/home.html' %}
+{% load static %}
+{% blog_tags %}
+
+
+
+<!-- ======= Title ======= -->
+{% block title %}
+  {% if auther.get_full_name %}
+    {{auther.get_full_name}}
+  {% else %}
+    {{authter.username}}
+  {% endif %}
+{% endblock %}
+<!-- ======= end Title ======= -->
+
+
+
+{% block hero %}
+{% endblock %}
+
+
+<!-- ======= Our Values Section ======= -->
+{% block content %}
+<style type="text/css">
+#single-page-content{
+  margin: 5% 5% 0 13%;
+  background-color: white;
+  padding: 20px;
+  border:2px solid #888888;
+  border-radius: 10px;
+  width: 90%;
+}
+.auther-p{
+  color:#0000008f;
+  margin-right: 20px;
+} 
+.media{
+  font-size: 40px;
+  margin: 5px;
+  display: block;
+  text-align: center ;
+  margin-top: -5%;
+}
+</style>
+<div style="display:inline-block; vertical-align:top; " id="single-page-content"> 
+  <img src="{{auther.profile.url}}" style="border-radius: 10px;  width: 20%;">
+  <div style="display: inline-block;">
+  <h3 style="margin-right: 20px; color: #444444d6;">نویسنده:
+                                            {% if auther.get_full_name %}
+                                                {{auther.get_full_name}}
+                                            {% else %}
+                                                {{auther.username}}
+                                            {% endif %}
+  </h3>       
+  <p class="auther-p">{{auther.description}}</p>
+  <p class="auther-p" style="display: inline;">زمان عضویت: {{auther.date_joined}}</p>         
+  <p class="auther-p" style="display: inline;">تعداد مقالات: {{articles_count}} عدد</p>
+
+  </div>
+  <div class="media">
+    {% if auther.twitter %}<a href="{{auther.twitter}}"><i class="bi bi-twitter"></i></a>{% endif %}
+    {% if auther.telegram %}<a href="{{auther.telegram}}"><i class="bi bi-telegram"></i></a>{% endif %}
+    {% if auther.instagram %}<a href="{{auther.instagram}}"><i class="bi bi-instagram"></i></a>{% endif %}
+    {% if auther.github %}<a href="{{auther.github}}"><i class="bi bi-github"></i></i></a>{% endif %}
+  </div>
+</div>
+
+      
+</section>
+      <section id="our-values" class="our-values">
+      <div class="container">
+        <div class="row">
+          {% if articles %}
+            <form class="search" action="{% url 'blog:search_auther_articles' auther.username %}" method="get" >
+              {% csrf_token %}
+              <input type="text" placeholder="Search.." name="search">
+              <button type="submit"><i class="bi bi-search"></i></button>
+            </form>
+            {% if search_word %}
+            <h1 style="text-align:center; margin-top: 25px; text-decoration:underline;">مقالات پیدا شده :</h1>
+            {% endif %}
+            {% for article in articles  %}
+                  <div class="col-md-6 d-flex align-items-stretch mt-4">
+                    <div class="card" style='background-image: url("{{article.image.url}}");'>
+                      <div class="card-body">
+                        <div>
+                        <a href="{% url 'blog:single_post' article.slug %}">   
+                        <h4 class="card-title" >{{article.title}}</h4>
+                        <p class="card-text">{{article.description|truncatewords:30}}</p>
+                        </a>
+                        </div>
+                        <div class="read-more read-more-p"><a href="#"> بیشتر بخوانید  <i class="bi bi-arrow-left"></i></a></div>
+                      </div>
+                    </div>
+                  </div>
+            {% endfor %}
+          {% else %}
+            <div style="margin-bottom: 20%;">
+              <h4 style='text-align: center; margin-bottom:20px'>محتوایی برای نمایش دادن وجود ندارن :(</h4>
+              <img src="{% static 'blog/assets/img/no-content.webp' %}" style="margin: auto; display: block;" >
+            </div>
+             
+          {% endif %}
+        </div>
+        {% pagination blog url search_word  %}
+      </div>
+</section>
+
+{% include 'blog/ourـgoal.html' %}
+
+{% endblock %}
+
+<!-- End Our Values Section -->

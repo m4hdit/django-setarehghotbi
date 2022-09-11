@@ -1,0 +1,118 @@
+{% extends 'blog/home.html' %}
+{% load static %}
+
+
+
+<!-- ======= Title ======= -->
+{% block title %}درباره ما | setarehghotbi{% endblock %}
+<!-- ======= end Title ======= -->
+
+
+
+{% block hero %}
+    <style type="text/css">
+      #hero {
+      width: 100%;
+      height: 100vh;
+      background: url('{% static "blog/assets/img/3053975.jpg" %}') top center;
+      background-size: cover;
+      position: relative;
+    }
+    </style>
+    <div id="hero">
+    </div>
+{% endblock %}
+
+
+<!-- ======= Our Values Section ======= -->
+{% block content %}
+<style type="text/css">
+.user-p{
+  color: #939393;
+
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+
+.column {
+  float: right;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+  padding:20px;
+}
+
+.card:hover{
+  box-shadow: 0 10px 16px 0 black;
+  transition: 0.3s;
+}
+.about-section {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+
+}
+
+
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+.media{
+  font-size: 40px;
+  margin: 5px;
+  display: block;
+  text-align: center ;
+}
+</style>
+      
+</section>
+      <section>
+      <div class="container">
+        <div class="row">
+         <div class="about-section">
+          <h2 style="text-align:center; color: white;">Our Team</h2>
+            {% for user in team %}
+              <div class="column">
+                <a href="{% url 'blog:auther_articles' user.username %}">
+                <div class="card">
+                  <img src="{{user.profile.url}}" style="width:100%; border-radius: 50%; margin-bottom: 20px; ">
+                  <h1 style="color:#717171">{{user.username}}</h1>
+                  <p class="user-p">{{user.date_joined}}</p>
+                  <p class="user-p">{{user.description}}</p>
+                  <div class="media">
+                    {% if user.twitter %}<a href="{{auther.twitter}}"><i class="bi bi-twitter"></i></a>{% endif %}
+                    {% if user.telegram %}<a href="{{auther.telegram}}"><i class="bi bi-telegram"></i></a>{% endif %}
+                    {% if user.instagram %}<a href="{{auther.instagram}}"><i class="bi bi-instagram"></i></a>{% endif %}
+                    {% if user.github %}<a href="{{auther.github}}"><i class="bi bi-github"></i></i></a>{% endif %}
+                  </div>
+                  </a>
+                </div>
+              </div>
+            {% endfor %}
+        </div>
+      </div>
+</section>
+
+{% include 'blog/ourـgoal.html' %}
+
+{% include 'blog/contact.html' %}
+
+
+{% endblock %}
+
+<!-- End Our Values Section -->

@@ -1,0 +1,73 @@
+    <section id="contact" class="contact">
+    <div>
+      <h4 style="text-align: center; padding-bottom:20px; color: #ff9275;">با ما در ارتباط باشید و پیشنهادات خود را بیان کنید</h4>
+       <hr style="margin: 0 10% 0 10%;">
+    </div>
+      <div class="container">
+
+        <div class="row mt-5">
+
+          <div class="col-lg-4">
+            <div class="info">
+              <div class="address">
+                <i class="bi bi-geo-alt"></i>
+                <h4>نشانی:</h4>
+                <p>جهان ، منظومه شمسی ، زمین ، اسیا ، ایران</p>
+              </div>
+
+              <div class="email">
+                <i class="bi bi-envelope"></i>
+                <h4>ایمیل:</h4>
+                <p>mahdit85111@gmail.com</p>
+              </div>
+
+              <div class="phone">
+                <i class="bi bi-phone"></i>
+                <h4>شماره تماس:</h4>
+                <p>+۱۲۳۴۵۶۷۸۹۰</p>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="col-lg-8 mt-5 mt-lg-0">
+
+            <form action="/send-ticket/" method="post" role="form" class="php-email-form">
+              {% csrf_token %}
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <input class="form-control" placeholder="نام شما" type="text" name="name" maxlength="30" required="" id="id_name">
+                  </div>
+
+                  <div class="col-md-6 form-group mt-3 mt-md-0">
+                    <input class="form-control" placeholder="ایمیل شما" type="email" name="email" maxlength="250" required="" id="id_email">
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <input class="form-control" placeholder="عنوان" type="text" name="title" maxlength="100" required="" id="id_title">
+                  </div>
+
+                  <div class="form-group mt-3">
+                    <textarea class="form-control" placeholder="متن پیام...." name="message" cols="40" rows="10" maxlength="500" required="" id="id_message"></textarea>
+                  </div>
+
+                  <div class="my-3">
+                    <div class="loading">درحال ارسال</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">پیامتون ارسال شد از شما برای همکاری تون ممنونیم</div>
+                  </div>
+
+                  <div class="text-center"><a href="/send-ticket/"><button type="submit">ارسال پیام</button></a></div>
+            </form>
+
+          </div>
+
+        </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </section>
